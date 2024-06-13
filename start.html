@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gourav Go Games</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        #container {
+            text-align: center;
+            background: #34495e;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            width: 80%;
+            max-width: 600px;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        #welcome-text {
+            font-size: 36px;
+            font-weight: bold;
+            margin-top: 50px;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        #mode-text {
+            font-size: 24px;
+            margin-top: 30px;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        .mode-button {
+            display: block;
+            margin: 10px auto;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #e74c3c;
+            color: #ecf0f1;
+            text-decoration: none;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .mode-button:hover {
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body>
+    <audio id="startMusic" autoplay loop>
+        <source src="Game.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <div id="container">
+        <div id="welcome-text"></div>
+        
+        <div id="mode-text">
+            Welcome, you returned after an apocalyptic<br>
+            Choose mode
+        </div>
+        
+        <div>
+            <a href="easy.html" class="mode-button">Easy</a>
+            <a href="normal.html" class="mode-button">Normal</a>
+            <a href="hard.html" class="mode-button">Hard</a>
+        </div>
+    </div>
+    
+    <script>
+        const welcomeText = document.getElementById('welcome-text');
+        
+        function showWelcomeText() {
+            const text = "Welcome to Gourav Go Games";
+            let index = 0;
+            
+            const interval = setInterval(() => {
+                welcomeText.textContent += text[index];
+                index++;
+                
+                if (index === text.length) {
+                    clearInterval(interval);
+                }
+            }, 100);
+        }
+        
+        showWelcomeText();
+    </script>
+</body>
+</html>

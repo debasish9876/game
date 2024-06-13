@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apocalyptic Survival Quiz</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        #quiz-container {
+            text-align: center;
+            background: #34495e;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            width: 80%;
+            max-width: 600px;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        #mode-text {
+            margin-bottom: 20px;
+            font-size: 1.2em;
+        }
+
+        #memory-bar {
+            width: 100%;
+            background: #7f8c8d;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            height: 30px;
+            box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+        }
+
+        #memory-bar-fill {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, #27ae60, #2ecc71);
+            transition: width 0.5s ease-in-out;
+        }
+
+        .button-container {
+            margin-top: 20px;
+        }
+
+        button {
+            background: #e74c3c;
+            border: none;
+            padding: 10px 20px;
+            color: #ecf0f1;
+            font-size: 1em;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            margin: 5px;
+        }
+
+        button:hover {
+            background: #c0392b;
+        }
+
+        input[type="radio"] {
+            margin: 10px;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-size: 1.1em;
+            color: #ecf0f1;
+        }
+
+        #game-over-container,
+        #congratulations-container {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #game-over-text,
+        #congratulations-text {
+            font-size: 2em;
+            margin: 20px 0;
+        }
+
+        #run-gif,
+        #itachi-gif {
+            width: 150px;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <div id="quiz-container">
+        <div id="mode-text">
+            Welcome, you returned after an apocalypse.<br>
+            Choose mode
+        </div>
+        
+        <div id="memory-bar">
+            <div id="memory-bar-fill"></div>
+        </div>
+        
+        <div id="result"></div>
+        
+        <div class="button-container">
+            <button id="check-answer">Check Answer</button>
+            <button id="next-question" style="display: none;">Next Question</button>
+        </div>
+    </div>
+
+    <div id="game-over-container">
+        <div id="game-over-text"></div>
+        <img id="run-gif" src="run.gif" alt="Game Over">
+        <button id="try-again">Try Again</button>
+    </div>
+
+    <div id="congratulations-container">
+        <div id="congratulations-text"></div>
+        <img id="itachi-gif" src="itachi.gif" alt="Congratulations">
+        <div class="button-container">
+            <button onclick="location.href='normal.html'">Play Again</button>
+            <button onclick="location.href='start.html'">Home</button>
+            <button onclick="location.href='Game.html'">Main Menu</button>
+            <button onclick="location.href='hard.html'">Next Stage</button>
+        </div>
+    </div>
+
+    <script>
+
+let questions = [
+  { question: "In a world where memories are lost, what is the most crucial skill for survival?", options: ["Scavenging for resources", "Defending against threats", "Adapting to new situations"], answer: 2 },
+  { question: "What is the primary cause of widespread memory loss in a post-apocalyptic world?", options: ["Biological weapon experiment", "Electromagnetic pulse attack", "Toxic waste contamination"], answer: 0 },
+  { question: "How do survivors cope with the loss of personal memories in a world where the past is forgotten?", options: ["Relying on shared stories and legends", "Focusing on the present moment", "Seeking out lost memories through hypnosis"], answer: 1 },
+  { question: "What is the most significant challenge faced by survivors in a world where collective memories are lost?", options: ["Rebuilding infrastructure and technology", "Preserving cultural identity and values", "Preventing conflicts between groups"], answer: 1 },
+  { question: "In a post-apocalyptic world, what role does shared memory play in the survival of humanity?", options: ["Shared memory binds communities together", "Shared memory is a burden that holds us back", "Shared memory is irrelevant to survival"], answer: 0 },
+  { question: "How do survivors adapt to a world where personal memories are lost, and what strategies do they use to cope?", options: ["Relying on technology to store memories", "Forming strong emotional bonds with others", "Engaging in repetitive tasks to create new memories"], answer: 1 },
+  { question: "What is the impact of memory loss on the social dynamics of survivors in a post-apocalyptic world?", options: ["Memory loss leads to increased trust and cooperation", "Memory loss leads to increased conflict and mistrust", "Memory loss has no significant impact on social dynamics"], answer: 1 },
+  { question: "In a world where memories are lost, what is the most important aspect of preserving humanity's history and knowledge?", options: ["Establishing a centralized repository of information", "Passing down knowledge through oral traditions", "Developing mnemonic devices and memory aids"], answer: 1 },
+  { question: "How do survivors maintain a sense of personal identity in a world where memories are lost?", options: ["By creating physical mementos            and keepsakes", "By engaging in rituals and routines", "By exploring their surroundings to trigger new memories"], answer: 2 },
+  { question: "What is the most significant threat to the mental well-being of survivors in a post-apocalyptic world where memories are lost?", options: ["Loneliness and isolation", "Paranoia and mistrust", "Existential crisis and loss of purpose"], answer: 0 },
+  { question: "In a world where memories are lost, what role does storytelling play in the survival of humanity?", options: ["Storytelling helps preserve memories and history", "Storytelling is a distraction from the harsh reality", "Storytelling is a means of coping with memory loss"], answer: 0 },
+  { question: "How do survivors navigate the challenges of a post-apocalyptic world where memories are lost?", options: ["By relying on instinct and intuition", "By forming strong emotional bonds with others", "By engaging in repetitive tasks to create new memories"], answer: 1 },
+  { question: "What is the impact of memory loss on the ability of survivors to learn and adapt in a post-apocalyptic world?", options: ["Memory loss hinders learning and adaptation", "Memory loss enhances learning and adaptation", "Memory loss has no significant impact on learning and adaptation"], answer: 0 },
+  { question: "In a world where memories are lost, what is the most important aspect of preserving humanity's cultural heritage?", options: ["Documenting and archiving cultural artifacts", "Passing down traditions and customs through oral histories", "Engaging in cultural practices and rituals"], answer: 1 },
+  { question: "How do survivors maintain a sense of hope and resilience in a world where memories are lost?", options: ["By focusing on the present moment and small victories", "By engaging in acts of kindness and compassion", "By seeking out new experiences and adventures"], answer: 2 },
+  { question: "What is the most significant threat to the physical well-being of survivors in a post-apocalyptic world where memories are lost?", options: ["Lack of access to medical resources", "Exposure to environmental hazards", "Attacks from other survivors"], answer: 1 },
+  { question: "In a world where memories are lost, what role does technology play in the preservation of knowledge and memories?", options: ["Technology is essential for preserving memories and knowledge", "Technology is a hindrance to preserving memories and knowledge", "Technology has no significant impact on preserving memories and knowledge"], answer: 0 },
+  { question: "How do survivors navigate the ethical dilemmas that arise in a post-apocalyptic world where memories are lost?", options: ["By relying on moral principles and values", "By engaging in pragmatic decision-making", "By seeking guidance from respected elders and leaders"], answer: 0 },
+  { question: "What is the impact of memory loss on the ability of survivors to form meaningful relationships in a post-apocalyptic world?", options: ["Memory loss makes it easier to form relationships", "Memory loss makes it harder to form relationships", "Memory loss has no significant impact on relationships"], answer: 1 },
+  { question: "In a world where memories are lost, what is the most important aspect of rebuilding a sense of community and shared purpose?", options: ["Establishing a common set of values and goals", "Engaging in collaborative projects and tasks", "Celebrating shared experiences and milestones"], answer: 2 }
+];
+
+let currentQuestionIndex = 0;
+let score = 0;
+let memory = 100;
+let selectedQuestions = [];
+
+function getRandomQuestions() {
+    let questionPool = [...questions];
+    for (let i = 0; i < 10; i++) {
+        let randomIndex = Math.floor(Math.random() * questionPool.length);
+        selectedQuestions.push(questionPool[randomIndex]);
+        questionPool.splice(randomIndex, 1);
+    }
+}
+
+function showQuestion() {
+    const modeText = document.getElementById('mode-text');
+    modeText.innerHTML = '';
+
+    if (currentQuestionIndex >= selectedQuestions.length) {
+        showCongratulations();
+        return;
+    }
+
+    const question = selectedQuestions[currentQuestionIndex];
+    modeText.innerHTML = `<p>${question.question}</p>`;
+    question.options.forEach((option, index) => {
+        modeText.innerHTML += `<div><input type="radio" name="option" value="${index}"> ${option}</div>`;
+    });
+    document.getElementById('result').innerHTML = '';
+}
+
+function checkAnswer() {
+    const userAnswer = document.querySelector('input[name="option"]:checked');
+    if (!userAnswer) {
+        document.getElementById('result').innerHTML = "Please select an answer.";
+        return;
+    }
+
+    const answer = parseInt(userAnswer.value);
+    const correctAnswer = selectedQuestions[currentQuestionIndex].answer;
+
+    if (answer === correctAnswer) {
+        document.getElementById('result').innerHTML = "Correct!";
+        score++;
+    } else {
+        document.getElementById('result').innerHTML = "Wrong. The correct answer is " + selectedQuestions[currentQuestionIndex].options[correctAnswer];
+        memory -= 20;
+        if (memory < 0) memory = 0;
+        updateMemoryBar();
+        if (memory === 0) {
+            gameOver();
+            return;
+        }
+    }
+
+    document.getElementById('check-answer').style.display = 'none';
+    document.getElementById('next-question').style.display = 'inline-block';
+}
+
+function nextQuestion() {
+    currentQuestionIndex++;
+    document.getElementById('check-answer').style.display = 'inline-block';
+    document.getElementById('next-question').style.display = 'none';
+    showQuestion();
+}
+
+function updateMemoryBar() {
+    const memoryBarWidth = (memory / 100) * 100;
+    document.getElementById('memory-bar-fill').style.width = memoryBarWidth + '%';
+}
+
+function gameOver() {
+    document.getElementById('quiz-container').style.display = 'none';
+    document.getElementById('game-over-container').style.display = 'flex';
+    displayGameOverText();
+}
+
+function displayGameOverText() {
+    const gameOverText = "GAME OVER";
+    const gameOverElement = document.getElementById('game-over-text');
+    gameOverElement.innerHTML = '';
+    let index = 0;
+
+    function typeLetter() {
+        if (index < gameOverText.length) {
+            gameOverElement.innerHTML += gameOverText[index];
+            index++;
+            setTimeout(typeLetter, 200);
+        }
+    }
+
+    typeLetter();
+}
+
+function showCongratulations() {
+    document.getElementById('quiz-container').style.display = 'none';
+    document.getElementById('congratulations-container').style.display = 'flex';
+    displayCongratulationsText();
+}
+
+function displayCongratulationsText() {
+    const congratulationsText = "CONGRATULATIONS YOU WON";
+    const congratulationsElement = document.getElementById('congratulations-text');
+    congratulationsElement.innerHTML = '';
+    let index = 0;
+
+    function typeLetter() {
+        if (index < congratulationsText.length) {
+            congratulationsElement.innerHTML += congratulationsText[index];
+            index++;
+            setTimeout(typeLetter, 200);
+        }
+    }
+
+    typeLetter();
+}
+
+document.getElementById('check-answer').addEventListener('click', checkAnswer);
+document.getElementById('next-question').addEventListener('click', nextQuestion);
+document.getElementById('try-again').addEventListener('click', () => location.reload());
+
+getRandomQuestions();
+showQuestion();
+</script>
+<audio autoplay loop>
+    <source src="easy.mp3" type="audio/mpeg">
+  </audio>
+  </body>
+  </html>  
